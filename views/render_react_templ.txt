@@ -1,0 +1,3 @@
+<div data-react-props=\"
+\" data-component-name=\"
+\"><script type=\"text/javascript\">\n        (function(){\n          const componentName = document.currentScript.closest('div').getAttribute('data-component-name')\n          bundle.renderComponent(document.currentScript.closest('div'), componentName)\n        })()\n\t\t</script></div>
