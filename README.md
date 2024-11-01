@@ -21,7 +21,7 @@ I have included a helper templ method `views.RenderReact` which accepts a prop m
 
 for example i have a Counter.tsx component which is imported in the `assets/js/index.tsx` (which is the entrypoint of our javascript) and by providing a
 ```go
-		@views.RenderReact(map[string]any{/*your props would go here*/}, "Counter")
+@views.RenderReact(map[string]any{/*your props would go here*/}, "Counter")
 ```
 we are able to render a react component from a templ file and also passing to it props
 
