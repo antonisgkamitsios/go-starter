@@ -36,8 +36,12 @@ func (app *application) disableCacheInDevMode(next http.Handler) http.Handler {
 
 func (app *application) comesFromHTMX(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		test := r.Header.Get("Hx-Request")
-		ctx := context.WithValue(r.Context(), htmx.HTMXRequestKEY, test != "")
+		// if the request has "Hx-History-Restore-Request" is means it had a cache miss
+		// and it wants back the entire html
+		hxRequest := r.Header.Get("Hx-Request") != "" &&
+			r.Header.Get("Hx-History-Restore-Request") == ""
+
+		ctx := context.WithValue(r.Context(), htmx.HTMXRequestKEY, hxRequest)
 
 		r = r.WithContext(ctx)
 
