@@ -1,22 +1,35 @@
-import { createRoot } from 'react-dom/client';
+import { createRoot, Root } from 'react-dom/client';
 
 import { ComponentType } from 'react';
 import * as Components from './components';
 
-export function renderComponent(e: HTMLElement, componentName: string) {
-  const Component: ComponentType<any> = Components[componentName];
-  if (!Component) {
-    console.error('You have not provided a component');
-    return;
-  }
+const storedRoots = new Map<string, Root>();
 
-  let props: any;
-  try {
-    props = JSON.parse(e.getAttribute('data-react-props') ?? '');
-  } catch (e) {
-    console.error(`Cannot parse props for component ${componentName}, it need to be a json serialized`);
-    return;
-  }
+export function renderComponent(elem: HTMLElement | undefined, componentName: string, id: string) {
+  const _renderComponent = () => {
+    const Component: ComponentType<any> = Components[componentName];
+    if (!Component) {
+      console.error(`Cannot find Component with name: ${componentName}, is the component exported?`);
+      return;
+    }
 
-  createRoot(e).render(<Component {...props} />);
+    let props: any;
+    try {
+      props = JSON.parse(elem.getAttribute('data-react-props') ?? '');
+    } catch (e) {
+      console.error(`Cannot parse props for component ${componentName}, it needs to be a json serialized`);
+      return;
+    }
+
+    if (storedRoots.has(id)) {
+      const storedRoot = storedRoots.get(id);
+      if (storedRoot) storedRoot.unmount();
+      storedRoots.delete(id);
+    }
+
+    const newRoot = createRoot(elem);
+    storedRoots.set(id, newRoot);
+    newRoot.render(<Component {...props} />);
+  };
+  _renderComponent();
 }

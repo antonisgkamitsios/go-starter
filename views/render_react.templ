@@ -1,14 +1,24 @@
 package views
 
+import "fmt"
+
 // RenderReact is a templ function that will accept any props and a component name and render the corresponding component
 //  warning: the component must be exported and available in the global bundle
 templ RenderReact(props map[string]any, componentName string) {
-	<div data-react-props={ templ.JSONString(props) } data-component-name={ componentName }>
+	<div
+		data-react-props={ templ.JSONString(props) }
+		data-react-component-name={ componentName }
+		data-react-id={ fmt.Sprintf("react__%s", componentName) }
+		hx-history="false"
+	>
 		<script type="text/javascript">
-        (function(){
-          const componentName = document.currentScript.closest('div').getAttribute('data-component-name')
-          bundle.renderComponent(document.currentScript.closest('div'), componentName)
-        })()
+      function renderReact(){
+        const elem = document.currentScript.closest('div')
+        const componentName = elem.getAttribute('data-react-component-name')
+				const id = elem.getAttribute('data-react-id')
+        bundle.renderComponent(elem, componentName, id)
+      }
+      renderReact()
 		</script>
 	</div>
 }

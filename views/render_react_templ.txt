@@ -1,3 +1,4 @@
 <div data-react-props=\"
-\" data-component-name=\"
-\"><script type=\"text/javascript\">\n        (function(){\n          const componentName = document.currentScript.closest('div').getAttribute('data-component-name')\n          bundle.renderComponent(document.currentScript.closest('div'), componentName)\n        })()\n\t\t</script></div>
+\" data-react-component-name=\"
+\" data-react-id=\"
+\" hx-history=\"false\"><script type=\"text/javascript\">\n      function renderReact(){\n        const elem = document.currentScript.closest('div')\n        const componentName = elem.getAttribute('data-react-component-name')\n\t\t\t\tconst id = elem.getAttribute('data-react-id')\n        bundle.renderComponent(elem, componentName, id)\n      }\n      renderReact()\n\t\t</script></div>
