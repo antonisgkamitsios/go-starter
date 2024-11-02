@@ -2,8 +2,8 @@ package layout
 
 templ Nav() {
 	<nav>
-		<a hx-get="/" hx-push-url="true" hx-target="#contents">Home</a>
-		<a hx-get="/about" hx-push-url="true" hx-target="#contents">About</a>
+		<a hx-get="/" hx-push-url="true" hx-swap="outerHTML" hx-target="#contents">Home</a>
+		<a hx-get="/about" hx-push-url="true" hx-swap="outerHTML" hx-target="#contents">About</a>
 	</nav>
 	<script type="text/javascript">
   function styleLinks(){
