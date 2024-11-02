@@ -5,7 +5,7 @@ import * as Components from './components';
 
 const storedRoots = new Map<string, Root>();
 
-export function renderComponent(elem: HTMLElement | undefined, componentName: string, id: string) {
+export function renderComponent(elem: HTMLElement, componentName: string, id: string) {
   const _renderComponent = () => {
     const Component: ComponentType<any> = Components[componentName];
     if (!Component) {

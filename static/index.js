@@ -24535,20 +24535,31 @@ var bundle = (() => {
 
   // assets/js/index.tsx
   var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
-  function renderComponent(e, componentName) {
-    const Component = components_exports[componentName];
-    if (!Component) {
-      console.error("You have not provided a component");
-      return;
-    }
-    let props;
-    try {
-      props = JSON.parse(e.getAttribute("data-react-props") ?? "");
-    } catch (e2) {
-      console.error(`Cannot parse props for component ${componentName}, it need to be a json serialized`);
-      return;
-    }
-    (0, import_client.createRoot)(e).render(/* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Component, { ...props }));
+  var storedRoots = /* @__PURE__ */ new Map();
+  function renderComponent(elem, componentName, id) {
+    const _renderComponent = () => {
+      const Component = components_exports[componentName];
+      if (!Component) {
+        console.error(`Cannot find Component with name: ${componentName}, is the component exported?`);
+        return;
+      }
+      let props;
+      try {
+        props = JSON.parse(elem.getAttribute("data-react-props") ?? "");
+      } catch (e) {
+        console.error(`Cannot parse props for component ${componentName}, it needs to be a json serialized`);
+        return;
+      }
+      if (storedRoots.has(id)) {
+        const storedRoot = storedRoots.get(id);
+        if (storedRoot) storedRoot.unmount();
+        storedRoots.delete(id);
+      }
+      const newRoot = (0, import_client.createRoot)(elem);
+      storedRoots.set(id, newRoot);
+      newRoot.render(/* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Component, { ...props }));
+    };
+    _renderComponent();
   }
   return __toCommonJS(js_exports);
 })();
