@@ -1,16 +1,28 @@
 package layout
 
+import "github.com/antonisgkamitsios/go-starter/internal/htmx"
+
 templ Base() {
-	<!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<meta charset="UTF-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<link rel="stylesheet" href="/static/styles.css"/>
-			<script src="static/index.js"></script>
-		</head>
-		<body class="container m-auto">
+	if htmx.GetIfHTMXRequest(ctx) {
+		<div id="contents">
 			{ children... }
-		</body>
-	</html>
+		</div>
+	} else {
+		<!DOCTYPE html>
+		<html lang="en">
+			<head>
+				<meta charset="UTF-8"/>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+				<link rel="stylesheet" href="/static/styles.css"/>
+				<script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
+				<script src="static/index.js"></script>
+			</head>
+			<body class="container m-auto">
+				@Nav()
+				<div id="contents">
+					{ children... }
+				</div>
+			</body>
+		</html>
+	}
 }

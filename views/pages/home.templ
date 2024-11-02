@@ -1,15 +1,12 @@
 package pages
 
 import (
-	"github.com/antonisgkamitsios/go-starter/views/layout"
 	"github.com/antonisgkamitsios/go-starter/views"
+	"github.com/antonisgkamitsios/go-starter/views/layout"
 )
 
 templ Home(props map[string]any) {
 	@layout.Base() {
-		<nav>
-			This element comes from templ
-		</nav>
 		@views.RenderReact(props, "AnotherComponent")
 		<br/>
 		@views.RenderReact(props, "Counter")

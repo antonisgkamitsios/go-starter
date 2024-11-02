@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"log"
@@ -9,7 +10,8 @@ import (
 	"os"
 	"strconv"
 
-	pages "github.com/antonisgkamitsios/go-starter/views/pages/home"
+	"github.com/antonisgkamitsios/go-starter/internal/htmx"
+	pages "github.com/antonisgkamitsios/go-starter/views/pages"
 	"github.com/joho/godotenv"
 )
 
@@ -28,6 +30,17 @@ func (app *application) disableCacheInDevMode(next http.Handler) http.Handler {
 	}
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "no-store")
+		next.ServeHTTP(w, r)
+	})
+}
+
+func (app *application) comesFromHTMX(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		test := r.Header.Get("Hx-Request")
+		ctx := context.WithValue(r.Context(), htmx.HTMXRequestKEY, test != "")
+
+		r = r.WithContext(ctx)
+
 		next.ServeHTTP(w, r)
 	})
 }
@@ -63,8 +76,12 @@ func main() {
 		pages.Home(map[string]any{"name": "antonis", "whatever": 4}).Render(r.Context(), w)
 	})
 
+	mux.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
+		pages.About().Render(r.Context(), w)
+	})
+
 	fmt.Printf("Server is listening on port %d", cfg.port)
-	err = http.ListenAndServe(fmt.Sprintf(":%d", cfg.port), app.disableCacheInDevMode(mux))
+	err = http.ListenAndServe(fmt.Sprintf(":%d", cfg.port), app.disableCacheInDevMode(app.comesFromHTMX(mux)))
 	if err != nil {
 		log.Fatal(err)
 	}
