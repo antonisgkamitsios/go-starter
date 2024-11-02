@@ -33,5 +33,5 @@ live:
     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); \
     return next(); \
 	 }' \
-	--no-open --reload-debounce 500 &
+	--no-open &
 	make -j4 live/server live/templ live/esbuild live/tailwind 
