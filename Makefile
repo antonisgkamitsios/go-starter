@@ -3,7 +3,7 @@ include .env
 # re-create _templ.txt files on change, then send reload event to browser. 
 # Default url: http://localhost:7331
 live/templ:
-	templ generate --watch --open-browser=false -v
+	templ generate --watch --proxy="http://localhost:${PORT}" --open-browser=false -v
 
 # run air to detect any go file changes to re-build and re-run the server.
 live/server:
@@ -23,15 +23,15 @@ live/tailwind:
 live/esbuild:
 	npx esbuild --bundle assets/js/index.tsx --outdir=static/ --global-name=bundle --watch=forever
 
-# start all 4 watch processes in parallel with browser-sync to watch for updates in static and templ files.
-live: 
-	npx browser-sync start \
-	--files "static/*, **/*.templ" \
-	--port 7331 \
-	--proxy "http://localhost:${PORT}" \
-	 --middleware 'function(req, res, next) { \
-    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); \
-    return next(); \
-	 }' \
-	--no-open &
-	make -j4 live/server live/templ live/esbuild live/tailwind 
+# watch for any js or css change in the assets/ folder, then reload the browser via templ proxy.
+live/sync_assets:
+	go run github.com/cosmtrek/air@v1.51.0 \
+	--build.cmd "templ generate --notify-proxy" \
+	--build.bin "true" \
+	--build.delay "100" \
+	--build.exclude_dir "" \
+	--build.include_dir "static" \
+	--build.include_ext "js,css"
+
+live:
+	make -j5 live/templ live/server live/tailwind live/esbuild live/sync_assets
