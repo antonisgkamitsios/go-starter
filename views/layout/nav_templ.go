@@ -8,6 +8,14 @@ package layout
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
+var links = []struct {
+	name string
+	href string
+}{
+	{name: "Home", href: "/"},
+	{name: "About", href: "/about"},
+}
+
 func Nav() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -29,7 +37,39 @@ func Nav() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav class=\"py-2 mb-2 flex justify-end\" hx-boost=\"true\" hx-target=\"#contents\" hx-swap=\"outerHTML\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, link := range links {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a class=\"p-2 relative text-black dark:text-white before:content-[&#39;&#39;] \n                before:absolute before:bottom-0 \n                before:left-0 before:h-[1px] \n                before:bg-black \n                dark:before:bg-white\n                before:w-full\n                before:scale-x-0\n                before:transition-all\n                hover:before:scale-x-100\" href=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var2 templ.SafeURL = templ.URL(link.href)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var2)))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-push-url=\"true\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(link.name)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout/nav.templ`, Line: 31, Col: 15}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script type=\"text/javascript\">\n      function styleLinks() {\n        const nav = document.currentScript.closest('nav')\n        const navLinks = nav.querySelectorAll(\"a\");\n\n        const toggleClass = () => {\n          for (let i = 0; i < navLinks.length; i++) {\n            var link = navLinks[i]\n            if (link.getAttribute('href') == window.location.pathname) {\n              link.classList.add(\"active\");\n            } else {\n              link.classList.remove(\"active\")\n            }\n          }\n        }\n\n        nav.addEventListener('click', (e) => {\n          if(e.target.tagName !== \"A\") {\n            return;\n          }\n          toggleClass()\n        })\n        window.addEventListener(\"popstate\", () => {\n          toggleClass()\n        })\n        toggleClass()\n      }\n      styleLinks()\n  </script></nav>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

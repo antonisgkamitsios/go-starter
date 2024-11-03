@@ -1,2 +1,0 @@
- <br>
- <div class=\"border border-red-200\">this is a div</div><div class=\"text-blue-600 border border-red-200\">This is a test</div>

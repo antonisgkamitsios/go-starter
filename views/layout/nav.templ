@@ -1,21 +1,63 @@
 package layout
 
+var links = []struct {
+	name string
+	href string
+}{
+	{name: "Home", href: "/"},
+	{name: "About", href: "/about"},
+}
+
 templ Nav() {
-	<nav>
-		<a hx-get="/" hx-push-url="true" hx-swap="outerHTML" hx-target="#contents">Home</a>
-		<a hx-get="/about" hx-push-url="true" hx-swap="outerHTML" hx-target="#contents">About</a>
-	</nav>
-	<script type="text/javascript">
-  function styleLinks(){
-    const navLinks = document.querySelectorAll("nav a");
-    for (let i = 0; i < navLinks.length; i++) {
-      var link = navLinks[i]
-      if (link.getAttribute('href') == window.location.pathname) {
-        link.classList.add("live");
-        break;
+	<nav
+		class="py-2 mb-2 flex justify-end"
+		hx-boost="true"
+		hx-target="#contents"
+		hx-swap="outerHTML"
+	>
+		for _, link := range links {
+			<a
+				class="p-2 relative text-black dark:text-white before:content-[''] 
+                before:absolute before:bottom-0 
+                before:left-0 before:h-[1px] 
+                before:bg-black 
+                dark:before:bg-white
+                before:w-full
+                before:scale-x-0
+                before:transition-all
+                hover:before:scale-x-100"
+				href={ templ.URL(link.href) }
+				hx-push-url="true"
+			>{ link.name }</a>
+		}
+		<script type="text/javascript">
+      function styleLinks() {
+        const nav = document.currentScript.closest('nav')
+        const navLinks = nav.querySelectorAll("a");
+
+        const toggleClass = () => {
+          for (let i = 0; i < navLinks.length; i++) {
+            var link = navLinks[i]
+            if (link.getAttribute('href') == window.location.pathname) {
+              link.classList.add("active");
+            } else {
+              link.classList.remove("active")
+            }
+          }
+        }
+
+        nav.addEventListener('click', (e) => {
+          if(e.target.tagName !== "A") {
+            return;
+          }
+          toggleClass()
+        })
+        window.addEventListener("popstate", () => {
+          toggleClass()
+        })
+        toggleClass()
       }
-    }
-  }
-  styleLinks()
+      styleLinks()
   </script>
+	</nav>
 }
