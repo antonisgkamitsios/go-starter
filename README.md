@@ -9,7 +9,7 @@ npm install
 ```
 
 ## run locally
-we use makefile to run air+templ+tailwind+esbuild in watch mode and tie them together with `browser-sync` to allow us browser reloading.
+we use makefile to run air+templ+tailwind+esbuild in watch mode with templ's notify proxy feature to allow us browser reloading.
 
 To run them all in parallel just type:
 ```
