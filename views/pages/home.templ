@@ -6,7 +6,7 @@ import (
 )
 
 templ Home(props map[string]any) {
-	@layout.Base() {
+	@layout.Base("Home") {
 		@views.RenderReact(props, "AnotherComponent")
 		<br/>
 		@views.RenderReact(props, "Counter")

@@ -2,8 +2,9 @@ package layout
 
 import "github.com/antonisgkamitsios/go-starter/internal/htmx"
 
-templ Base() {
+templ Base(title string) {
 	if htmx.GetIfHTMXRequest(ctx) {
+		<title>{ title }</title>
 		<div id="contents">
 			{ children... }
 		</div>
@@ -16,6 +17,7 @@ templ Base() {
 				<link rel="stylesheet" href="/static/styles.css"/>
 				<script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
 				<script src="static/index.js"></script>
+				<title>{ title }</title>
 			</head>
 			<body class="container m-auto">
 				@Nav()
