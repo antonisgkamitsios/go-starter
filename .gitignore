@@ -2,3 +2,7 @@ node_modules
 .env
 tmp
 *_templ.txt
+
+# static generateed stuff
+static/index.js
+static/styles.css
