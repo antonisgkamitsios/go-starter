@@ -4,7 +4,6 @@ tmp
 
 # templ stuff
 *_templ.txt
-*_templ.go
 
 # static generateed stuff
 static/index.js
